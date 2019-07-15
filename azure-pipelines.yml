@@ -59,16 +59,16 @@ stages:
             inputs:
               artifactName: 'manifests'
               downloadPath: '$(System.ArtifactsDirectory)/manifests'
+          
           - task: KubernetesManifest@0
+            displayName: Create imagePullSecret from dockerRegistryServiceConnection
             inputs:
-              action: 'createSecret'
-              kubernetesServiceConnection: 'aksworkshop-my-newcluster-dev-1563225446446'
-              namespace: 'dev'
-              secretType: 'dockerRegistry'
-              secretName: 'acr-auth'
-              dockerRegistryEndpoint: 'containerRegistryConnection'
+              action: createSecret
+              secretName: acr-auth
+              namespace:  $(k8sNamespace)
+              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
 
-         
+      
 
           - task: KubernetesManifest@0
             displayName: Create secret for MongoDB
